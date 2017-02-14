@@ -4,12 +4,10 @@ import Node from '../scripts/node'
 
 describe('testing Trie functionality',()=>{
 
-  let trie;
+  it('should log shit', () => {
+    let trie = new Trie();
+    trie.insert('hey')
 
-  beforeEach(() => {
-    trie = new Trie();
-  });
-
-  it('',()=>{
   })
+
 });
