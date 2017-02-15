@@ -4,17 +4,23 @@ import Node from '../scripts/node'
 
 describe('testing Trie functionality',()=>{
 
+  it
+
+  it('should add a letter to the child node', ()=>{
+    let trie = new Trie();
+  })
+
   it('should log shit', () => {
     let trie = new Trie();
-    console.log
-    trie.insert('apple');
-    trie.insert('tree');
-    trie.insert('tbd');
-    trie.insert('tba');
+    trie.insert('bear');
+    trie.insert('bet');
+    trie.insert('better');
+    trie.insert('be');
 
-    console.log(JSON.stringify(trie, null, 4))
+    trie.suggest('be');
+    console.log(trie.suggestList)
 
-    expect(trie.root.data).to.equal('a')
+    expect(trie.root).to.equal({a,t})
   })
 
 
