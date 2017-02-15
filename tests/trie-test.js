@@ -6,9 +6,13 @@ describe('testing Trie functionality',()=>{
 
   it('should log shit', () => {
     let trie = new Trie();
-    trie.insert('bob');
+    console.log
     trie.insert('apple');
-      console.log(JSON.stringify(trie, null, 4))
+    trie.insert('tree');
+    trie.insert('tbd');
+    trie.insert('tba');
+
+    console.log(JSON.stringify(trie, null, 4))
 
     expect(trie.root.data).to.equal('a')
   })
