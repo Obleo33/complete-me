@@ -1,4 +1,7 @@
 import Node from './node'
+import fs from 'fs';
+
+const text     = "/usr/share/dict/words"
 
 export default class Trie{
   constructor() {
@@ -22,19 +25,25 @@ export default class Trie{
     current.isWord = true;
     current.value = word;
     this.count ++;
+    // console.log(JSON.stringify(this, null, 4))
   }
 
   suggest(string){
+    this.suggestList = [];
     let suggestStr = string.split('');
     let current = this.root;
+    let noMatch = false;
 
     suggestStr.forEach(letter => {
       if (current.children[letter]){
         return current = current.children[letter];
+      } else {
+        noMatch = true;
       }
     })
-
-    this.wordSuggest(current,string);
+    return !noMatch?
+            this.wordSuggest(current,string):
+            'none';
   }
 
   wordSuggest(current,string){
@@ -48,6 +57,13 @@ export default class Trie{
       let nextNode = current.children[letter];
       this.wordSuggest(nextNode,(string + letter));
     })
+    return this.suggestList
+  }
 
+  populate() {
+    let dictionary = fs.readFileSync(text).toString('utf-8').trim().split('\n')
+    dictionary.forEach((word) => {
+      this.insert(word)
+    })
   }
 }
