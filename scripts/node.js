@@ -4,5 +4,6 @@ export default class Node {
     this.data     = letter,
     this.children = {},
     this.value    = '';
+    this.pref     = 0;
   }
 }

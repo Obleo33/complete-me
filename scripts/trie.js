@@ -28,27 +28,42 @@ export default class Trie{
     // console.log(JSON.stringify(this, null, 4))
   }
 
-  suggest(string){
-    this.suggestList = [];
+  locate(string) {
     let suggestStr = string.split('');
-    let current    = this.root;
+    let endNode    = this.root;
     let noMatch    = false;
 
     suggestStr.forEach(letter => {
-      if (current.children[letter]){
-        return current = current.children[letter];
+      if (endNode.children[letter]){
+        return endNode = endNode.children[letter];
       } else {
         noMatch = true;
       }
     });
-    return !noMatch?
-            this.wordSuggest(current,string):
-            'none';
+    return !noMatch? endNode: null;
+  }
+
+  suggest(string){
+    let endNode = this.locate(string);
+    this.suggestList = [];
+
+    if (endNode !== null){
+      this.suggestList = this.wordSuggest(endNode,string);
+      this.suggestList.sort(( a, b) => {
+        return b.pref - a.pref;
+      });
+      this.suggestList.forEach((wordObj,index) => {
+        this.suggestList[index] = wordObj.word;
+      });
+      return this.suggestList;
+    } else {
+      return 'none';
+    }
   }
 
   wordSuggest(current,string){
     if (current.isWord){
-      this.suggestList.push(string);
+      this.suggestList.push({word: string, pref: current.pref});
     }
 
     let keysArr = Object.keys(current.children);
@@ -57,11 +72,6 @@ export default class Trie{
       let nextNode = current.children[letter];
       this.wordSuggest(nextNode,(string + letter));
     });
-    // checkSuggestions(this.suggestList, string)
-    // are there any suggestions
-       // if there is a key {'piz':{'pizzaria':1 }
-       // grab the word and reorder it within suggestLIst
-       // else return suggestList
     return this.suggestList;
   }
 
@@ -71,7 +81,18 @@ export default class Trie{
       this.insert(word);
     });
   }
+
+  select(word) {
+    this.locate(word).pref ++;
+  }
 }
+
+// checkSuggestions(this.suggestList, string)
+// are there any suggestions
+   // if there is a key {'piz':{'pizzaria':1 }
+   // grab the word and reorder it within suggestLIst
+   // else return suggestList
+
 
 //When you use select move throught the tree and find the end node
 //and add a counter to that node

@@ -1,4 +1,4 @@
-import { expect,describe,beforeEach,it } from 'chai';
+import { expect } from 'chai';
 import Trie from '../scripts/trie';
 import Node from '../scripts/node';
 
@@ -34,7 +34,7 @@ describe('testing Trie functionality',() => {
       trie.insert('b');
       trie.insert('b');
 
-      expect(trie.root.children).to.deep.equal({ b:{ isWord: true, data: 'b', children: {}, value: 'b'}});
+      expect(trie.root.children).to.not.have.property('b','b');
     });
 
     it('should add a child node to the prevous letter for each letter in a word', () => {
@@ -51,7 +51,7 @@ describe('testing Trie functionality',() => {
 
       expect(trie.root.children).to.have.property('b')
                                 .to.have.property('children')
-                                .to.deep.equal({ e:{ isWord: true, data: 'e', children: {}, value: 'be'}});
+                                .to.not.have.deep.property('e','e');
     });
 
     it('should create a new child node for a letter that is shared', () => {
@@ -117,13 +117,12 @@ describe('testing Trie functionality',() => {
     });
   });
 
-
   describe('testing populate functionaity', () => {
     beforeEach(() => {
       trie.populate();
     });
 
-    it.only('should add all the words in the dictionary', () => {
+    it('should add all the words in the dictionary', () => {
       expect(trie.count).to.equal(235886);
     }),
 
@@ -134,5 +133,34 @@ describe('testing Trie functionality',() => {
     it('should return none if there are no real words', () => {
       expect(trie.suggest('fartaxi')).to.equal('none');
     });
+  });
+
+  describe('testing select functionaity', () => {
+    it('should incriment the pref of the final node of the selected word', () => {
+      trie.insert('be');
+      trie.select('be');
+
+      expect(trie.root.children).to.have.property('b')
+                                .to.have.property('children')
+                                .to.have.property('e')
+                                .to.have.property('pref')
+                                .to.equal(1);
+    });
+
+    it('should take a string and suggest all complete words beginning with the string', () => {
+      trie.insert('be');
+      trie.insert('better');
+      trie.insert('bear');
+      trie.insert('and');
+      trie.insert('can');
+      trie.insert('boat');
+
+      trie.select('better');
+      trie.select('better');
+      trie.select('be');
+
+      expect(trie.suggest('be')).to.deep.equal(['better','be','bear']);
+    });
+
   });
 });
