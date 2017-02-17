@@ -11,7 +11,7 @@ export default class Trie{
   }
 
   insert(word){
-    let wordArr = word.split('');
+    const wordArr = word.split('');
     let current = this.root;
 
     wordArr.forEach((letter) => {
@@ -29,7 +29,7 @@ export default class Trie{
   }
 
   locate(string) {
-    let suggestStr = string.split('');
+    const suggestStr = string.split('');
     let endNode    = this.root;
     let noMatch    = false;
 
@@ -44,7 +44,7 @@ export default class Trie{
   }
 
   suggest(string){
-    let endNode = this.locate(string);
+    const endNode = this.locate(string);
     this.suggestList = [];
 
     if (endNode !== null){
@@ -69,17 +69,17 @@ export default class Trie{
       this.suggestList.push({word: string, pref: current.pref});
     }
 
-    let keysArr = Object.keys(current.children);
+    const keysArr = Object.keys(current.children);
 
     keysArr.forEach(letter => {
-      let nextNode = current.children[letter];
+      const nextNode = current.children[letter];
       this.wordSuggest(nextNode,(string + letter));
     });
     return this.suggestList;
   }
 
   populate() {
-    let dictionary = fs.readFileSync(text).toString('utf-8').trim().split('\n');
+    const dictionary = fs.readFileSync(text).toString('utf-8').trim().split('\n');
     dictionary.forEach((word) => {
       this.insert(word);
     });
@@ -89,19 +89,3 @@ export default class Trie{
     this.locate(word).pref ++;
   }
 }
-
-// checkSuggestions(this.suggestList, string)
-// are there any suggestions
-   // if there is a key {'piz':{'pizzaria':1 }
-   // grab the word and reorder it within suggestLIst
-   // else return suggestList
-
-
-//When you use select move throught the tree and find the end node
-//and add a counter to that node
-
-
-//pass in the suggestion and choose word
-// suggest(partialWord, wordToSuggest) {
-
-//when
