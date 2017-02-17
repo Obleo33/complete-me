@@ -49,12 +49,15 @@ export default class Trie{
 
     if (endNode !== null){
       this.suggestList = this.wordSuggest(endNode,string);
+
       this.suggestList.sort(( a, b) => {
         return b.pref - a.pref;
       });
+
       this.suggestList.forEach((wordObj,index) => {
         this.suggestList[index] = wordObj.word;
       });
+
       return this.suggestList;
     } else {
       return 'none';
